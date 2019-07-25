@@ -6,6 +6,7 @@ using System.Linq;
 
 public class eCommerce
 {
+    private static decimal deliverCharges = 10;
     public void Execute()
     {
         var shoppingCart = new List<OrderDetails>();
@@ -30,9 +31,9 @@ public class eCommerce
 
                     var table = new ConsoleTable("Id", "Product Name", "Unit Price");
 
-                    foreach (var product in productList)                    
+                    foreach (var product in productList)
                         table.AddRow(product.Id, product.ProductName, product.UnitPrice);
-                    
+
 
                     table.Write();
 
@@ -67,13 +68,14 @@ public class eCommerce
                     var totalOrderAmount = shoppingCart.Sum(s => s.TotalAmount);
                     var table2 = new ConsoleTable("Product Name", "Price", "Quantity", "Total");
 
-                    foreach (var item in shoppingCart2)                    
+                    foreach (var item in shoppingCart2)
                         table2.AddRow(item.ProductName, item.UnitPrice, item.QuantityOrder, item.TotalAmount);
-                    
 
                     table2.Write();
 
-                    Console.WriteLine("Total Order Amount: " + totalOrderAmount);
+                    Console.WriteLine("------------------------------------------");
+                    Console.WriteLine("Delivery charges: " + deliverCharges);
+                    Console.WriteLine("Total Order Amount: " + totalOrderAmount + deliverCharges);
                     break;
                 default:
                     break;
