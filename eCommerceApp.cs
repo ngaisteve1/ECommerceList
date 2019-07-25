@@ -6,14 +6,15 @@ using System.Linq;
 
 public class eCommerce
 {
-    private static decimal deliverCharges = 10;
+    private const decimal deliverCharges = 10.00M;
     public void Execute()
     {
         var shoppingCart = new List<OrderDetails>();
         var productList = new List<Product>();
         while (true)
         {
-            Console.WriteLine("Menu");
+            Console.Clear();
+            Console.WriteLine("Azada E-Commerce App");
             Console.WriteLine("1. Browser all products.");
             Console.WriteLine("2. View shopping cart.");
             Console.Write("Enter your option: ");
@@ -29,7 +30,7 @@ public class eCommerce
                         new Product(){ Id = 16, ProductName = "Dell Wireless Keyboard and Mouse Combo ", UnitPrice = 70.00M}
                     };
 
-                    var table = new ConsoleTable("Id", "Product Name", "Unit Price");
+                    var table = new ConsoleTable("Product Id", "Product Name", "Unit Price");
 
                     foreach (var product in productList)
                         table.AddRow(product.Id, product.ProductName, product.UnitPrice);
@@ -37,7 +38,7 @@ public class eCommerce
 
                     table.Write();
 
-                    Console.WriteLine("Enter the product ID you want to buy: ");
+                    Console.Write("Enter the product ID you want to buy: ");
                     int productId = int.Parse(Console.ReadLine());
 
                     var selectedProduct = productList.FirstOrDefault(p => p.Id == productId);
@@ -45,10 +46,10 @@ public class eCommerce
                     if (selectedProduct == null)
                     {
                         Console.WriteLine("Product not found.");
-                        return;
+                        break;
                     }
 
-                    Console.WriteLine("Enter quantity to buy: ");
+                    Console.Write("Enter quantity to buy: ");
                     int quantity = int.Parse(Console.ReadLine());
 
                     var order = new OrderDetails();
@@ -65,8 +66,15 @@ public class eCommerce
                     var shoppingCart2 = from s in shoppingCart
                                         join p in productList on s.ProductId equals p.Id
                                         select new { p.ProductName, p.UnitPrice, s.QuantityOrder, s.TotalAmount };
-                    var totalOrderAmount = shoppingCart.Sum(s => s.TotalAmount);
+                    var totalOrderAmount = 0M;
+                    totalOrderAmount = shoppingCart.Sum(s => s.TotalAmount);
                     var table2 = new ConsoleTable("Product Name", "Price", "Quantity", "Total");
+
+                    if (shoppingCart2.ToList().Count == 0)
+                    {
+                        System.Console.WriteLine("Shopping cart is empty. Go to browse products.");
+                        break;
+                    }
 
                     foreach (var item in shoppingCart2)
                         table2.AddRow(item.ProductName, item.UnitPrice, item.QuantityOrder, item.TotalAmount);
@@ -75,11 +83,34 @@ public class eCommerce
 
                     Console.WriteLine("------------------------------------------");
                     Console.WriteLine("Delivery charges: " + deliverCharges);
-                    Console.WriteLine("Total Order Amount: " + totalOrderAmount + deliverCharges);
+                    Console.WriteLine("Total Order Amount: " + (totalOrderAmount + deliverCharges));
+
+                    Console.WriteLine("1. Confirm order and proceed to make payment.");
+                    Console.WriteLine("2. Cancel order.");
+                    Console.Write("Enter option:");
+                    string opt2 = Console.ReadLine();
+                    switch (opt2)
+                    {
+                        case "1":
+                            Console.WriteLine("Choose payment method and key in delivery details.");
+                            Console.ReadKey();
+                            Console.WriteLine("Info: This E-Commerce simulation app ends here....");
+                            break;
+                        case "2":
+                            shoppingCart.Clear();
+                            System.Console.WriteLine("Shopping cart is empty. Go to browse products.");
+                            break;
+                        default:
+                            Console.WriteLine("Invalid option.");
+                            break;
+                    }
+
                     break;
                 default:
+                    Console.WriteLine("Invalid option.");
                     break;
             }
+            Console.ReadKey();
         }
     }
 }
