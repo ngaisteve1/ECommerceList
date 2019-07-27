@@ -43,6 +43,7 @@ public class eCommerce
                     ViewShoppingCart(valid_Customer);
                     break;
                 case "3":
+                    Utility.printDotAnimation();
                     valid_Customer = null;
                     shoppingCart.Clear();
                     Execute();
@@ -65,7 +66,7 @@ public class eCommerce
             userInput.Username = Console.ReadLine();
 
             Console.Write("Password: ");
-            userInput.Password = Console.ReadLine();
+            userInput.Password = Utility.ReadPassword();
 
             var validCustomer = validCustomers
             .Where(c => c.Username.Equals(userInput.Username))
@@ -73,9 +74,13 @@ public class eCommerce
             .FirstOrDefault();
 
             if (validCustomer != null)
+            {
+                Utility.printDotAnimation();
                 return validCustomer;
+            }
 
-            Utility.PrintMessage("Invalid username or password.", ConsoleColor.Red);
+
+            Utility.PrintMessage("\nInvalid username or password.", ConsoleColor.Red);
             Console.ReadKey();
         }
     }
