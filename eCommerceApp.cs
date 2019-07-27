@@ -47,7 +47,7 @@ public class eCommerce
                     Execute();
                     break;
                 default:
-                    Console.WriteLine("Invalid option.");
+                    Utility.PrintMessage("Invalid option.", ConsoleColor.Red);
                     break;
             }
             Console.ReadKey();
@@ -73,7 +73,7 @@ public class eCommerce
             if (validCustomer != null)
                 return validCustomer;
 
-            Console.WriteLine("Invalid username or password");
+            Utility.PrintMessage("Invalid username or password.", ConsoleColor.Red);
             Console.ReadKey();
         }
     }
@@ -131,7 +131,7 @@ public class eCommerce
 
         if (selectedProduct == null)
         {
-            Console.WriteLine("Product not found.");
+            Utility.PrintMessage("Product not found.", ConsoleColor.Red);
             return;
         }
 
@@ -145,7 +145,7 @@ public class eCommerce
         order.TotalAmount = quantity * selectedProduct.UnitPrice;
 
         shoppingCart.Add(order);
-        Console.WriteLine($"{selectedProduct.ProductName} added into shopping cart.");
+        Utility.PrintMessage($"{selectedProduct.ProductName} added into shopping cart.", ConsoleColor.Yellow);
     }
 
     private void ViewShoppingCart(Customer valid_Customer)
@@ -160,7 +160,7 @@ public class eCommerce
 
         if (shoppingCart2.ToList().Count == 0)
         {
-            System.Console.WriteLine("Shopping cart is empty. Go to browse products.");
+            Utility.PrintMessage("Shopping cart is empty. Go to browse products.", ConsoleColor.Yellow);
             return;
         }
 
@@ -192,10 +192,10 @@ public class eCommerce
                 break;
             case "2":
                 shoppingCart.Clear();
-                System.Console.WriteLine("Shopping cart is empty. Go to browse products.");
+                Utility.PrintMessage("Shopping cart is empty. Go to browse products.", ConsoleColor.Yellow);
                 break;
             default:
-                Console.WriteLine("Invalid option.");
+                Utility.PrintMessage("Invalid option.", ConsoleColor.Red);
                 break;
         }
 
