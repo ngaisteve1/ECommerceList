@@ -16,6 +16,7 @@ public class eCommerce
         InitializeCustomerList();
         InitializeProductList();
         shoppingCart = new List<OrderDetails>();
+        Console.Title = "Azada e-Commerce App";
     }
 
     public void Execute()
@@ -59,6 +60,7 @@ public class eCommerce
         while (true)
         {
             var userInput = new Customer();
+            Console.Clear();
             Console.Write("Username: ");
             userInput.Username = Console.ReadLine();
 
@@ -113,6 +115,8 @@ public class eCommerce
 
     private void BrowseProducts()
     {
+        Console.Clear();
+
         var table = new ConsoleTable("Product Id", "Product Name", "Unit Price");
 
         foreach (var product in productList)
@@ -150,13 +154,15 @@ public class eCommerce
 
     private void ViewShoppingCart(Customer valid_Customer)
     {
+        Console.Clear();
+
         // inner join orderdetail and product.
         var shoppingCart2 = from s in shoppingCart
                             join p in productList on s.ProductId equals p.Id
                             select new { p.ProductName, p.UnitPrice, s.QuantityOrder, s.TotalAmount };
         var totalOrderAmount = 0M;
         totalOrderAmount = shoppingCart.Sum(s => s.TotalAmount);
-        var table2 = new ConsoleTable("Product Name", "Price", "Quantity", "Total");
+        var table = new ConsoleTable("Product Name", "Price", "Quantity", "Total");
 
         if (shoppingCart2.ToList().Count == 0)
         {
@@ -164,14 +170,16 @@ public class eCommerce
             return;
         }
 
+        Console.WriteLine("Total Items in Shopping Cart: " + shoppingCart2.Count());
         foreach (var item in shoppingCart2)
-            table2.AddRow(item.ProductName, item.UnitPrice, item.QuantityOrder, item.TotalAmount);
+            table.AddRow(item.ProductName, Utility.FormatAmount(item.UnitPrice), item.QuantityOrder, Utility.FormatAmount(item.TotalAmount));
 
-        table2.Write();
+        table.Options.EnableCount = false;
+        table.Write();
 
         Console.WriteLine("------------------------------------------");
-        Console.WriteLine("Delivery charges: " + deliverCharges);
-        Console.WriteLine("Total Order Amount: " + (totalOrderAmount + deliverCharges));
+        Console.WriteLine("Delivery charges: " + Utility.FormatAmount(deliverCharges));
+        Console.WriteLine("Total Order Amount: " + Utility.FormatAmount(totalOrderAmount + deliverCharges));
         Console.WriteLine("------------------------------------------");
         Console.WriteLine("Delivery Address: " + valid_Customer.Address);
 
@@ -188,7 +196,7 @@ public class eCommerce
                 Console.WriteLine("3. Online eBanking");
                 Console.Write("Enter option: ");
                 Console.ReadKey();
-                Console.WriteLine("Info: This E-Commerce simulation app ends here....");
+                Console.WriteLine("\n\nInfo: This E-Commerce simulation app ends here....");
                 break;
             case "2":
                 shoppingCart.Clear();
