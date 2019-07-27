@@ -7,8 +7,39 @@ using System.Linq;
 public class eCommerce
 {
     private const decimal deliverCharges = 10.00M;
+    private List<Customer> validCustomers;
+
+    public eCommerce()
+    {
+        validCustomers = new List<Customer>(){
+            new Customer(){
+                CustomerId = 1,
+                Username = "john",
+                Password = "john123",
+                FullName = "John Wong",
+                Email = "john@gmail.com",
+                Address = "8, Jalan Emas, 58000, Kuala Lumpur."
+                },
+                new Customer(){
+                CustomerId = 2,
+                Username = "mike",
+                Password = "mike123",
+                FullName = "Mike Lee",
+                Email = "mike@gmail.com",
+                Address = "13, Jalan Api, 55100, Kuala Lumpur."
+                }
+        };
+    }
     public void Execute()
     {
+        var valid_Customer = Login();
+        if (valid_Customer == null)
+        {
+            Console.WriteLine("Invalid username or password.");
+            Console.ReadKey();
+            return;
+        }
+
         var shoppingCart = new List<OrderDetails>();
         var productList = new List<Product>();
         while (true)
@@ -53,6 +84,7 @@ public class eCommerce
                     int quantity = int.Parse(Console.ReadLine());
 
                     var order = new OrderDetails();
+                    order.Customer_Id = valid_Customer.CustomerId;
                     order.ProductId = productId;
                     order.QuantityOrder = quantity;
                     order.TotalAmount = quantity * selectedProduct.UnitPrice;
@@ -84,15 +116,20 @@ public class eCommerce
                     Console.WriteLine("------------------------------------------");
                     Console.WriteLine("Delivery charges: " + deliverCharges);
                     Console.WriteLine("Total Order Amount: " + (totalOrderAmount + deliverCharges));
+                    Console.WriteLine("------------------------------------------");
+                    Console.WriteLine("Delivery Address: " + valid_Customer.Address);
 
-                    Console.WriteLine("1. Confirm order and proceed to make payment.");
+                    Console.WriteLine("\n1. Confirm order and proceed to make payment.");
                     Console.WriteLine("2. Cancel order.");
                     Console.Write("Enter option:");
                     string opt2 = Console.ReadLine();
                     switch (opt2)
                     {
                         case "1":
-                            Console.WriteLine("Choose payment method and key in delivery details.");
+                            Console.WriteLine("\nChoose payment method:");
+                            Console.WriteLine("1. Cash on delivery (COD)");
+                            Console.WriteLine("2. Credit Card");
+                            Console.WriteLine("3. Online eBanking");
                             Console.ReadKey();
                             Console.WriteLine("Info: This E-Commerce simulation app ends here....");
                             break;
@@ -112,5 +149,22 @@ public class eCommerce
             }
             Console.ReadKey();
         }
+    }
+
+    public Customer Login()
+    {
+        var userInput = new Customer();
+        Console.Write("Username: ");
+        userInput.Username = Console.ReadLine();
+
+        Console.Write("Password: ");
+        userInput.Password = Console.ReadLine();
+
+        var validCustomer = validCustomers
+        .Where(c => c.Username.Equals(userInput.Username))
+        .Where(c => c.Password.Equals(userInput.Password))
+        .FirstOrDefault();
+
+        return validCustomer;
     }
 }
