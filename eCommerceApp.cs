@@ -125,7 +125,7 @@ public class eCommerce
         var table = new ConsoleTable("Product Id", "Product Name", "Unit Price");
 
         foreach (var product in productList)
-            table.AddRow(product.Id, product.ProductName, product.UnitPrice);
+            table.AddRow(product.Id, product.ProductName, Utility.FormatAmount(product.UnitPrice));
 
 
         table.Write();
@@ -189,7 +189,8 @@ public class eCommerce
         Console.WriteLine("Delivery Address: " + valid_Customer.Address);
 
         Console.WriteLine("\n1. Confirm order and proceed to make payment.");
-        Console.WriteLine("2. Cancel order.");
+        Console.WriteLine("2. Clear shopping cart.");
+        Console.WriteLine("3. Back.");
         Console.Write("Enter option: ");
         string opt2 = Console.ReadLine();
         switch (opt2)
@@ -206,6 +207,8 @@ public class eCommerce
             case "2":
                 shoppingCart.Clear();
                 Utility.PrintMessage("Shopping cart is empty. Go to browse products.", ConsoleColor.Yellow);
+                break;
+            case "3":
                 break;
             default:
                 Utility.PrintMessage("Invalid option.", ConsoleColor.Red);
