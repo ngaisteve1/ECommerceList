@@ -54,7 +54,7 @@ public class eCommerce
         }
     }
 
-    public Customer Login()
+    private Customer Login()
     {
         while (true)
         {
