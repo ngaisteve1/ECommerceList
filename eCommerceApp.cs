@@ -202,7 +202,11 @@ public class eCommerce
                 Console.WriteLine("3. Online eBanking");
                 Console.Write("Enter option: ");
                 Console.ReadKey();
-                Console.WriteLine("\n\nInfo: This E-Commerce simulation app ends here....");
+                Console.WriteLine("\n\nRedirecting to payment gateway.");
+                Utility.printDotAnimation();
+                Console.WriteLine("Info: This E-Commerce simulation app ends here....");
+
+                // You can send email to the customer upon payment.
                 break;
             case "2":
                 shoppingCart.Clear();
